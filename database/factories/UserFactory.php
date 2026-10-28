@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\AdminPermission;
 use App\Enums\UserRole;
 use App\Enums\UserStatus;
 use App\Models\User;
@@ -66,6 +67,16 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'status' => UserStatus::Disabled,
+        ]);
+    }
+
+    public function withPermissions(AdminPermission ...$permissions): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'permissions' => array_map(
+                fn (AdminPermission $permission) => $permission->value,
+                $permissions,
+            ),
         ]);
     }
 }

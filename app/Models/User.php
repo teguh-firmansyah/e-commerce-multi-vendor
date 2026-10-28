@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AdminPermission;
 use App\Enums\UserRole;
 use App\Enums\UserStatus;
 use Database\Factories\UserFactory;
@@ -22,6 +23,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property string $password
  * @property UserRole $role
  * @property UserStatus $status
+ * @property array<int, string>|null $permissions
  * @property string|null $two_factor_secret
  * @property string|null $two_factor_recovery_codes
  * @property Carbon|null $two_factor_confirmed_at
@@ -49,6 +51,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'two_factor_confirmed_at' => 'datetime',
             'role' => UserRole::class,
             'status' => UserStatus::class,
+            'permissions' => 'array',
         ];
     }
 
@@ -60,5 +63,12 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isActive(): bool
     {
         return $this->status === UserStatus::Active;
+    }
+
+    public function hasPermission(AdminPermission $permission): bool
+    {
+        return $this->isAdmin()
+            && $this->isActive()
+            && in_array($permission->value, $this->permissions ?? [], true);
     }
 }

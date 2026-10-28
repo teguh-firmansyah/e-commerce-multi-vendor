@@ -8,4 +8,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
 });
 
+Route::middleware(['auth', 'verified', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::inertia('dashboard', 'Admin/Dashboard')->name('dashboard');
+    });
+
 require __DIR__.'/settings.php';
