@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
-import { BookOpen, FolderGit2, LayoutGrid } from '@lucide/vue';
+import { Link, usePage } from '@inertiajs/vue3';
+import { LayoutGrid, ShieldCheck, Store } from '@lucide/vue';
+import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
-import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import {
@@ -15,28 +15,78 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import { dashboard as adminDashboard } from '@/routes/admin';
+import { dashboard as sellerDashboard } from '@/routes/seller';
 import type { NavItem } from '@/types';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
-];
+interface Access {
+    isAdmin: boolean;
+    isSeller: boolean;
+}
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: FolderGit2,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
-    },
-];
+const page = usePage();
+
+const access = computed(
+    () => (page.props as Record<string, unknown>).access as Access | undefined,
+);
+
+const area = computed(() => {
+    if (page.url.startsWith('/admin')) {
+        return 'admin';
+    }
+
+    if (page.url.startsWith('/seller')) {
+        return 'seller';
+    }
+
+    return 'customer';
+});
+
+const customerItem: NavItem = {
+    title: 'Dashboard',
+    href: dashboard(),
+    icon: LayoutGrid,
+};
+
+const accountItem: NavItem = {
+    title: 'Akun Saya',
+    href: dashboard(),
+    icon: LayoutGrid,
+};
+
+const sellerItem: NavItem = {
+    title: 'Dashboard Toko',
+    href: sellerDashboard(),
+    icon: Store,
+};
+
+const adminItem: NavItem = {
+    title: 'Dashboard Admin',
+    href: adminDashboard(),
+    icon: ShieldCheck,
+};
+
+const mainNavItems = computed<NavItem[]>(() => {
+    if (area.value === 'admin') {
+        return [adminItem, accountItem];
+    }
+
+    if (area.value === 'seller') {
+        return [sellerItem, accountItem];
+    }
+
+    const items: NavItem[] = [customerItem];
+
+    if (access.value?.isSeller) {
+        items.push(sellerItem);
+    }
+
+    if (access.value?.isAdmin) {
+        items.push(adminItem);
+    }
+
+    return items;
+});
 </script>
 
 <template>
@@ -58,7 +108,6 @@ const footerNavItems: NavItem[] = [
         </SidebarContent>
 
         <SidebarFooter>
-            <NavFooter :items="footerNavItems" />
             <NavUser />
         </SidebarFooter>
     </Sidebar>

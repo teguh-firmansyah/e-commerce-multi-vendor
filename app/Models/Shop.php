@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use App\Enums\ShopStatus;
+use Carbon\CarbonInterface;
 use Database\Factories\ShopFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
@@ -22,10 +22,10 @@ use Illuminate\Support\Carbon;
  * @property string|null $banner_path
  * @property ShopStatus $status
  * @property string|null $status_reason
- * @property Carbon|null $approved_at
+ * @property CarbonInterface|null $approved_at
  * @property bool $is_open
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property CarbonInterface|null $created_at
+ * @property CarbonInterface|null $updated_at
  */
 #[Fillable(['name', 'slug', 'description', 'phone', 'logo_path', 'banner_path', 'is_open'])]
 class Shop extends Model

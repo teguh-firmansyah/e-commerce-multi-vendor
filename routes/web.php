@@ -8,6 +8,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
 });
 
+Route::middleware(['auth', 'verified', 'seller'])
+    ->prefix('seller')
+    ->name('seller.')
+    ->group(function () {
+        Route::inertia('dashboard', 'Seller/Dashboard')->name('dashboard');
+    });
+
 Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('admin')
     ->name('admin.')
