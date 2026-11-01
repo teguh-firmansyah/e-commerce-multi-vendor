@@ -30,59 +30,29 @@ const access = computed(
     () => (page.props as Record<string, unknown>).access as Access | undefined,
 );
 
-const area = computed(() => {
-    if (page.url.startsWith('/admin')) {
-        return 'admin';
-    }
-
-    if (page.url.startsWith('/seller')) {
-        return 'seller';
-    }
-
-    return 'customer';
-});
-
-const customerItem: NavItem = {
-    title: 'Dashboard',
-    href: dashboard(),
-    icon: LayoutGrid,
-};
-
-const accountItem: NavItem = {
-    title: 'Akun Saya',
-    href: dashboard(),
-    icon: LayoutGrid,
-};
-
-const sellerItem: NavItem = {
-    title: 'Dashboard Toko',
-    href: sellerDashboard(),
-    icon: Store,
-};
-
-const adminItem: NavItem = {
-    title: 'Dashboard Admin',
-    href: adminDashboard(),
-    icon: ShieldCheck,
-};
-
 const mainNavItems = computed<NavItem[]>(() => {
-    if (area.value === 'admin') {
-        return [adminItem, accountItem];
-    }
-
-    if (area.value === 'seller') {
-        return [sellerItem, accountItem];
-    }
-
-    const items: NavItem[] = [customerItem];
+    const items: NavItem[] = [
+        {
+            title: 'Dashboard',
+            href: dashboard(),
+            icon: LayoutGrid,
+        },
+    ];
 
     if (access.value?.isSeller) {
-        items.push(sellerItem);
+        items.push({
+            title: 'Dashboard Toko',
+            href: sellerDashboard(),
+            icon: Store,
+        });
     }
 
     if (access.value?.isAdmin) {
-        items.push(adminItem);
+        items.push({
+            title: 'Dashboard Admin',
+            href: adminDashboard(),
+            icon: ShieldCheck,
+        });
     }
 
     return items;

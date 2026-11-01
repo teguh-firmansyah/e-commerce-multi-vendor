@@ -8,6 +8,13 @@ use App\Models\User;
 
 class ShopPolicy
 {
+    public function create(User $user): bool
+    {
+        return $user->isActive()
+            && ! $user->isAdmin()
+            && ! $user->shop()->exists();
+    }
+
     public function update(User $user, Shop $shop): bool
     {
         return $user->isActive()
