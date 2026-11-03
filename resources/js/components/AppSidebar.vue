@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { ClipboardList, LayoutGrid, ShieldCheck, Store } from '@lucide/vue';
+import {
+    ClipboardList,
+    FolderTree,
+    LayoutGrid,
+    ShieldCheck,
+    Store,
+} from '@lucide/vue';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import NavMain from '@/components/NavMain.vue';
@@ -16,6 +22,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { dashboard as adminDashboard } from '@/routes/admin';
+import { index as adminCategories } from '@/routes/admin/categories';
 import { index as adminShops } from '@/routes/admin/shops';
 import { dashboard as sellerDashboard } from '@/routes/seller';
 import type { NavItem } from '@/types';
@@ -59,6 +66,11 @@ const mainNavItems = computed<NavItem[]>(() => {
                 title: 'Pengajuan Toko',
                 href: adminShops(),
                 icon: ClipboardList,
+            },
+            {
+                title: 'Kategori',
+                href: adminCategories(),
+                icon: FolderTree,
             },
         );
     }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ShopReviewController;
 use App\Http\Controllers\Customer\DashboardController;
 use App\Http\Controllers\Customer\ShopApplicationController;
@@ -34,6 +35,8 @@ Route::middleware(['auth', 'verified', 'admin'])
 
         Route::get('shops', [ShopReviewController::class, 'index'])->name('shops.index');
         Route::patch('shops/{shop}/status', [ShopReviewController::class, 'updateStatus'])->name('shops.status');
+
+        Route::resource('categories', CategoryController::class)->except(['show']);
     });
 
 require __DIR__.'/settings.php';
