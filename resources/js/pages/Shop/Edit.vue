@@ -16,6 +16,7 @@ interface ShopData {
     description: string | null;
     phone: string | null;
     is_open: boolean;
+    logo_url: string | null;
     status: string;
     status_reason: string | null;
 }
@@ -73,6 +74,33 @@ const textareaClass =
             class="space-y-6"
             v-slot="{ errors, processing }"
         >
+            <div class="grid gap-2">
+                <Label for="logo">Logo toko</Label>
+                <img
+                    v-if="shop.logo_url"
+                    :src="shop.logo_url"
+                    alt=""
+                    class="size-20 rounded object-cover"
+                />
+                <Input
+                    id="logo"
+                    name="logo"
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp"
+                />
+                <InputError :message="errors.logo" />
+                <div v-if="shop.logo_url" class="flex items-center gap-2">
+                    <input
+                        id="remove_logo"
+                        type="checkbox"
+                        name="remove_logo"
+                        value="1"
+                        class="size-4"
+                    />
+                    <Label for="remove_logo">Hapus logo saat ini</Label>
+                </div>
+            </div>
+
             <div class="grid gap-2">
                 <Label for="name">Nama toko</Label>
                 <Input

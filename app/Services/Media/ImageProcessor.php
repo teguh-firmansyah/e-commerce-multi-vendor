@@ -28,7 +28,7 @@ class ImageProcessor
             throw new InvalidArgumentException('File bukan gambar yang valid.');
         }
 
-        if ($info[2] === IMAGETYPE_JPEG && $path !== false) {
+        if ($info[2] === IMAGETYPE_JPEG) {
             $source = $this->applyOrientation($source, $path);
         }
 

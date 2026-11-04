@@ -9,6 +9,7 @@ use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -30,6 +31,7 @@ class ShopProfileController extends Controller
                 'description' => $shop->description,
                 'phone' => $shop->phone,
                 'is_open' => $shop->is_open,
+                'logo_url' => $shop->logoUrl(),
                 'status' => $shop->status->value,
                 'status_reason' => $shop->status_reason,
             ],
@@ -48,10 +50,17 @@ class ShopProfileController extends Controller
 
         Gate::authorize('update', $shop);
 
-        $action->execute($shop, [
-            ...$request->validated(),
-            'is_open' => $request->boolean('is_open'),
-        ]);
+        $logo = $request->file('logo');
+
+        $action->execute(
+            $shop,
+            [
+                ...$request->validated(),
+                'is_open' => $request->boolean('is_open'),
+            ],
+            $logo instanceof UploadedFile ? $logo : null,
+            $request->boolean('remove_logo'),
+        );
 
         Inertia::flash('toast', [
             'type' => 'success',

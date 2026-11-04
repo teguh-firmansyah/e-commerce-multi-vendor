@@ -75,4 +75,9 @@ class Shop extends Model
     {
         return $this->status === ShopStatus::Approved;
     }
+
+    public function logoUrl(): ?string
+    {
+        return $this->logo_path === null ? null : asset('storage/'.$this->logo_path);
+    }
 }

@@ -13,12 +13,12 @@ class CategoryFactory extends Factory
 {
     public function definition(): array
     {
-        $name = fake()->unique()->words(2, true);
+        $name = ucfirst(fake()->word()).' '.fake()->unique()->numerify('####');
 
         return [
             'parent_id' => null,
             'name' => $name,
-            'slug' => Str::slug($name).'-'.fake()->unique()->numerify('####'),
+            'slug' => Str::slug($name),
             'description' => null,
             'image_path' => null,
             'sort_order' => 0,
